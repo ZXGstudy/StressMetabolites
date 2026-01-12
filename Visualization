@@ -1,0 +1,166 @@
+###1.piechart====
+rm(list=ls())
+library(openxlsx)
+library(ggplot2)
+library(ggsci)
+
+df <- read.xlsx("../database/data.xlsx", sheet="Sheet1.1", colNames = TRUE, check.names = FALSE)
+
+# 方法1: 使用table()并转换为DataFrame
+category_df <- as.data.frame(table(df[,2]))
+colnames(category_df) <- c("category", "count")
+
+# 将count小于50的类别合并为"Other"
+category_df$category_orig <- category_df$category  # 保存原始分类
+category_df$category <- ifelse(category_df$count < 50, "Other", as.character(category_df$category))
+
+# 重新聚合数据，合并Other类别
+data <- aggregate(count ~ category, data = category_df, sum)
+
+# 按count降序排列
+data <- data[order(-data$count), ]
+
+# 计算百分比和标签
+data$fraction <- data$count / sum(data$count)
+data$percentage <- round(data$fraction * 100, 1)
+data$label <- paste0(data$percentage, "%")
+
+# 计算环形图的位置
+data$ymax <- cumsum(data$fraction)
+data$ymin <- c(0, head(data$ymax, n=-1))
+data$labelPosition <- (data$ymax + data$ymin) / 2
+
+# 创建更详细的图例标签（包含数量和百分比）
+data$legend_label <- paste0(data$category, " (", data$count, ", ", data$percentage, "%)")
+
+# 确保Other类别在最后
+if("Other" %in% data$category) {
+  other_row <- data[data$category == "Other", ]
+  data <- data[data$category != "Other", ]
+  data <- rbind(data, other_row)
+}
+
+# 重新计算位置（因为可能重新排序了）
+data$ymax <- cumsum(data$fraction)
+data$ymin <- c(0, head(data$ymax, n=-1))
+data$labelPosition <- (data$ymax + data$ymin) / 2
+
+# 创建环形图（不显示比例标签，图例按大小排序）
+p1 <- ggplot(data, aes(ymax = ymax, ymin = ymin, xmax = 4, xmin = 3, fill = reorder(legend_label, -count))) +
+  # 绘制环形图扇形
+  geom_rect(color = "white", size = 0.5, alpha = 0.9) +
+  # 使用Nature配色
+  scale_fill_npg(
+    name = "Host Categories",
+    guide = guide_legend(
+      reverse = FALSE,  # 不反转，大的在上方
+      keyheight = unit(0.8, "cm"),
+      keywidth = unit(0.8, "cm")
+    )
+  ) +
+  # 极坐标转换
+  coord_polar(theta = "y") +
+  # 设置x轴范围创建环形效果
+  xlim(c(2, 4.5)) +
+  theme_void() +
+  # 主题调整
+  theme(
+    legend.position = "right",
+    legend.title = element_text(face = "bold", size = 12),
+    legend.text = element_text(size = 10),
+    legend.key.size = unit(0.8, "cm"),
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    legend.box.margin = margin(0, 0, 0, 10)  # 图例边距
+  ) +
+  labs(
+    title = "Host Species Distribution",
+    fill = "Host Categories"
+  )
+print(p1)
+
+ggsave("../database/A_result/pie-host.pdf", 
+       plot = p1, 
+       width = 7, 
+       height = 7, 
+       device = pdf)
+
+
+
+
+####1.2 Sankey‼️====
+# 1. 创建连接数据框 (links) 
+rm(list=ls())
+# 1️⃣ 读取文件
+df <- read_excel("../database/data.xlsx", sheet = "Sheet3.1")
+
+# 第一层: Host -> Stress_Type
+links1 <- df %>%
+  group_by(Host, Stress_type) %>%
+  tally(name = "value") %>%
+  dplyr::rename(source = Host, target = Stress_type)
+
+# 第二层: Stress_Type -> Stress_Model
+links2 <- df %>%
+  group_by(Stress_type, Stress_model_match) %>%
+  tally(name = "value") %>%
+  dplyr::rename(source = Stress_type, target = Stress_model_match)
+
+# 第三层: Stress_Model -> Platform
+links3 <- df %>%
+  group_by(Stress_model_match, Sample_type) %>%
+  tally(name = "value") %>%
+  dplyr::rename(source = Stress_model_match, target = Sample_type)
+
+# 第四层: Platform -> Sample_Type
+links4 <- df %>%
+  group_by(Sample_type, Metabolite) %>%
+  tally(name = "value") %>%
+  dplyr::rename(source = Sample_type, target = Metabolite)
+
+# 第五层: Platform -> Sample_Type
+links5 <- df %>%
+  group_by(Metabolite, Up_or_Down) %>%
+  tally(name = "value") %>%
+  dplyr::rename(source = Metabolite, target = Up_or_Down)
+
+# 合并所有连接
+links <- bind_rows(links1,links2,links3,links4,links5)
+
+# 2. 创建节点数据框 (nodes) 
+# 节点数据框需要包含所有唯一的实体名称
+nodes <- data.frame(
+  name = unique(c(links$source, links$target))
+)
+
+# 3. 将连接中的名称转换为节点索引 
+# networkD3 要求使用从0开始的索引，而不是名称
+links$IDsource <- match(links$source, nodes$name) - 1
+links$IDtarget <- match(links$target, nodes$name) - 1
+
+# 检查节点数量
+cat("节点总数:", nrow(nodes), "\n")
+cat("连接总数:", nrow(links), "\n")
+
+# 检查各层节点分布
+table(nodes$group)
+
+# 4. 创建桑基图 
+p <- sankeyNetwork(
+  Links = links,      # 连接数据框
+  Nodes = nodes,      # 节点数据框
+  Source = "IDsource", # 源节点ID
+  Target = "IDtarget", # 目标节点ID
+  Value = "value",     # 连接的值（宽度）
+  NodeID = "name",     # 节点显示的名称
+  sinksRight = FALSE,  # 节点不对齐到右侧，让布局更自然
+  fontSize = 14,       # 字体大小
+  nodeWidth = 20,      # 节点宽度
+  height = 800,        # 图形高度
+  width = 1300         # 图形宽度
+)
+
+# 显示图形
+p
+library(htmlwidgets)
+library(webshot2)
+saveWidget(p, file="../database/A_result/sankeyBasic3.1.html")
