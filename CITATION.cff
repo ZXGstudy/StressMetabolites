@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use SMART or this repository, please cite the accompanying SMART manuscript."
+title: "SMART: Stress Metabolite Analysis and Research Tool"
+type: dataset
+version: 1.0.0
+date-released: 2026-09-07
+authors:
+  - family-names: "Zhong"
+    given-names: "Xiange"
+abstract: >-
+  SMART is a literature-curated evidence resource for stress-associated
+  metabolite changes across biological sources, host species, stress
+  paradigms, and analytical platforms.

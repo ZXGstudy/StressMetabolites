@@ -1,0 +1,11 @@
+# SMART and related resources
+
+| Resource | Primary_scope | Metadata_richness | Provenance | Identifier_mapping | Export_options | Update_policy | Main_niche_relative_to_SMART |
+|---|---|---|---|---|---|---|---|
+| HMDB | Human metabolite knowledgebase | Rich chemical, clinical, biochemical fields | Curated metabolite records | HMDB, KEGG, PubChem, ChEBI, etc. | Web/download depending on data type | Periodic releases | Strong for metabolite annotation, not stress-specific evidence aggregation |
+| PubChem | Chemical structure and compound information | Structure, synonyms, properties, bioactivity | Contributed substance and standardized compound records | PubChem CID | Web/download/API | Continuously updated | Strong for chemical identifiers and synonyms |
+| KEGG | Pathway and biochemical network knowledgebase | Pathway, reaction, enzyme, compound links | Curated pathway/compound records | KEGG compound/reaction/pathway IDs | Web/API/download depending on license | Regular releases | Strong for pathway context, not stress-specific literature curation |
+| MetaboLights | Public metabolomics study repository | Raw data and study metadata | Experimental study accession and submitted datasets | Study- and metabolite-level annotations when available | Repository downloads | Continuously updated repository | Strong for raw data reuse, not literature-level stress evidence mapping |
+| Metabolomics Workbench | Public metabolomics data repository | Experimental metadata, protocols, datasets | Study accession and dataset provenance | Metabolite structures and standards where available | Web/download tools | Repository updates | Strong for deposited datasets and analysis tools |
+| ChEBI | Chemical ontology | Ontology, synonyms, structures, cross-references | Curated ontology entries | ChEBI ID and cross-references | Web/download/ontology files | Periodic updates | Strong for ontology-based chemical classification |
+| SMART | Stress-associated metabolite-change evidence map | Stress model, host, tissue, metablites, comparison group, measure platform, change direction | Literature-curated observation-level records | Standardized metabolite names; external mapping where available | Web/downloadable tables | Periodic literature updates | Stress-centered evidence aggregation across heterogeneous studies |
