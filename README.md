@@ -7,6 +7,7 @@ Psychological stress is an important risk factor for a broad range of mental and
 
 SMART was developed to systematically organize these findings and provide a centralized resource for exploring **stress–metabolite associations**.
 
+![SMART overview](Figure_abstract.jpg)
 ---
 
 ## Web resource
@@ -19,6 +20,7 @@ SMART also provides an interactive web interface that allows users to explore st
 - biological source;
 - analytical platform;
 - direction of change.
+
 
 The SMART website is intended for interactive exploration, whereas this GitHub repository provides the underlying documentation, metadata, and reproducibility resources.
 
@@ -134,12 +136,10 @@ SMART/
 
 The SMART curation workflow can be summarized as:
 
-```text
+
 PubMed literature search
         ↓
 Initial literature screening
-        ↓
-Eligible stress-metabolomics studies
         ↓
 Study-level information extraction
         ↓
