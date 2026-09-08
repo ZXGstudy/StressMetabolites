@@ -1,106 +1,84 @@
-# SMART
-## A Stress Metabolite Analysis and Research Tool
+# SMART: Stress Metabolite Analysis and Research Tool
 
 **SMART** is a manually curated database that integrates published evidence on metabolite alterations associated with psychological stress across different host species, stress models, biological sources, and analytical platforms.
 
-Psychological stress is an important risk factor for a broad range of mental and physical disorders. Metabolic responses to stress have been investigated using diverse experimental models, organisms, tissues, and metabolomic technologies, resulting in a large but highly fragmented body of evidence.
-
-SMART was developed to systematically organize these findings and provide a centralized resource for exploring **stress–metabolite associations**.
+Psychological stress has been associated with a wide range of mental and physical disorders, yet metabolomic evidence remains scattered across different studies, tissues, species, and experimental models. SMART was developed to systematically organize these findings and provide a centralized resource for exploring **stress–metabolite associations**.
 
 ![SMART overview](Figure_abstract.jpg)
----
-
-## Web resource
-
-SMART also provides an interactive web interface that allows users to explore stress-associated metabolite evidence across multiple dimensions, including:
-
-- metabolite;
-- species;
-- stress model;
-- biological source;
-- analytical platform;
-- direction of change.
-
-
-The SMART website is intended for interactive exploration, whereas this GitHub repository provides the underlying documentation, metadata, and reproducibility resources.
-
-**SMART website:**  
-`https://db.hscmdb.com/`
 
 ---
 
-## Overview
+### [Explore the SMART database](https://db.hscmdb.com/)
+
+The web resource supports interactive exploration, while this GitHub repository provides supporting documentation, metadata, literature-screening information, and analysis scripts.
+
+---
+
+## Database Overview
 
 SMART currently contains:
 
 - **1,110 publications screened**
 - **545 eligible studies curated**
 - **6,175 stress-associated metabolite entries**
-- Multiple **host species**, including humans, rats, mice, and other experimental models
-- Multiple **stress paradigms**
-- Multiple **biological sources**, including brain, blood, feces, urine, gastrointestinal tissues, liver, and others
-- Multiple **analytical platforms**, including mass spectrometry- and NMR-based metabolomics
-- Information on the **direction of metabolite change** under stress
+- multiple **host species**, including humans, rats, mice, and other experimental models
+- multiple **stress paradigms**
+- multiple **biological sources**, including brain, blood, feces, urine, gastrointestinal tissues, liver, and others
+- multiple **analytical platforms**, including mass spectrometry- and NMR-based metabolomics
+- information on the **direction of metabolite change** under stress
 
 Each curated record is linked to its original publication and annotated using standardized metadata wherever possible.
 
 ---
 
-## What information does SMART contain?
+## What Information Does SMART Contain?
 
 SMART integrates information at both the **study level** and the **metabolite-observation level**.
-
-A typical SMART record may contain:
 
 | Category | Information |
 |---|---|
 | Literature | PMID, publication year, article title |
-| Study design | Study type, species, host category |
-| Stress exposure | Original stress model, standardized stress model, stress duration/type |
-| Metabolite | Original metabolite name, standardized metabolite name |
-| Biological source | Original sample type, standardized tissue/source category |
-| Analytical method | LC-MS, GC-MS, NMR, or other platforms |
-| Regulation | Up or Down under stress |
+| Study design | Study type, host species, host category |
+| Stress exposure | Original and standardized stress models, stress type |
+| Metabolite | Original and standardized metabolite names |
+| Biological source | Original sample type and standardized source category |
+| Analytical method | LC-MS, GC-MS, NMR, and other platforms |
+| Regulation | Up- or down-regulation under stress |
 | Comparison | Original comparison groups reported in the study |
 
----
-
-## Basic unit of SMART
-
-The basic unit of SMART is **one metabolite-change observation**, rather than one publication.
-
-A single study may therefore contribute multiple entries when it reports:
-
-- multiple metabolites;
-- multiple biological sources;
-- multiple stress conditions;
-- multiple analytical platforms;
-- multiple comparison groups.
-
-This observation-level structure allows SMART to preserve the complexity of the original studies while enabling standardized cross-study exploration.
+The basic unit of SMART is **one metabolite-change observation**. Therefore, a single publication may contribute multiple entries when it reports multiple metabolites, sample sources, stress conditions, analytical platforms, or comparison groups.
 
 ---
 
-## What can SMART be used for?
+## What Can SMART Be Used For?
 
-SMART can support several types of stress-related metabolomics research.
-
-Users can use SMART to:
+SMART can be used to:
 
 - identify metabolites repeatedly associated with psychological stress;
-- examine literature evidence for a given metabolite;
-- compare stress-associated metabolic alterations across species;
+- examine published evidence for individual stress-associated metabolites;
+- explore the biological sources in which metabolite changes have been reported;
+- compare stress-associated metabolic evidence across host species and stress models;
 - identify candidate metabolites for experimental validation;
-- generate hypotheses regarding systemic metabolic responses to stress.
+- generate hypotheses for stress-related metabolic research.
 
 ---
 
+## Repository Contents
 
-## Repository structure
+| Directory / File | Description |
+|---|---|
+| `data/` | PubMed search strategy, retrieved records, and literature-screening information |
+| `metadata/` | Data dictionary, extraction template, metabolite identifiers, and synonym mappings |
+| `scripts/` | R scripts used for summary analyses and visualization |
+| `Figure_abstract.jpg` | Graphical overview of the SMART database |
+| `CHANGELOG.md` | Repository update history |
+| `CONTRIBUTING.md` | Guidance for suggesting corrections or new studies |
+| `LICENSE` | Terms for reuse of code and curated data |
+
+### Repository structure
 
 ```text
 SMART/
-│
 ├── README.md
 ├── LICENSE
 ├── CHANGELOG.md
@@ -119,14 +97,14 @@ SMART/
 │   └── 04_Metabolite_synonyms.csv
 │
 ├── scripts/
-│   ├── plot bar chart.R
-│   ├── plot heatmap.R
-│   ├── plot pie chart.R
-│   ├── plot sankey.R
-│   ├── plot two-side bar chart.R
-│   ├── plot upset graph.R
-│   ├── plot volcano_host.R
-│   └──plot volcano_sample source.R
+│   ├── 01_plot_bar_chart.R
+│   ├── 02_plot_heatmap.R
+│   ├── 03_plot_pie_chart.R
+│   ├── 04_plot_sankey.R
+│   ├── 05_plot_two_side_bar_chart.R
+│   ├── 06_plot_upset.R
+│   ├── 07_plot_volcano_host.R
+│   └── 08_plot_volcano_sample_source.R
 │
 └── Figure_abstract.jpg
 
@@ -149,8 +127,6 @@ Metabolite-name harmonization
         ↓
 Tissue / stress model / platform standardization
         ↓
-External identifier mapping
-        ↓
 SMART database
 ```
 
@@ -158,12 +134,6 @@ SMART database
 
 ## Contact
 
-For questions regarding SMART, data curation, or database updates, please contact the SMART development team or open a GitHub Issue.
+For questions, data corrections, or suggestions of relevant studies, please open a GitHub Issue or contact the SMART development team.
 
 ---
-
-## Acknowledgement
-
-SMART was developed to provide a centralized, transparent, and reusable resource for understanding how psychological stress is associated with metabolic alterations across different biological systems.
-
-By integrating fragmented metabolomics evidence across studies, tissues, species, and experimental models, SMART aims to facilitate cross-study comparison, hypothesis generation, and future mechanistic research on stress-related metabolic regulation.
