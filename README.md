@@ -80,10 +80,8 @@ SMART can be used to:
 ```text
 SMART/
 ├── README.md
-├── LICENSE
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
-├── VERSION
 │
 ├── data/
 │   ├── 01_pubmed_search_strategy.csv
