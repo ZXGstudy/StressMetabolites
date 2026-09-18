@@ -4,7 +4,7 @@
 
 Psychological stress has been associated with a wide range of mental and physical disorders, yet metabolomic evidence remains scattered across different studies, tissues, species, and experimental models. SMART was developed to systematically organize these findings and provide a centralized resource for exploring **stress–metabolite associations**.
 
-![SMART overview](Figure_abstract.jpg)
+![SMART overview](Figure_abstract.jpeg)
 
 ---
 
